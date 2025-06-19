@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <title>Express</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    body > div {
+      padding: 5px;
+      border-radius: 5px;
+      background-color: gray;
+    }
+
+    .buttons {
+      display: flex;
+    }
+
+    .buttons > * {
+      flex: 1;
+    }
+
+    .table {
+      background-color: white;
+      border-radius: 5px;
+      display: grid;
+      justify-items: center;
+      grid-template-columns: <%= columns.map(()=>"1fr").join(" ")%>;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div class="buttons">
+      <button>New Sources</button>
+      <button>Current Sources</button>
+    </div>
+    <div class="table">
+      <% columns.forEach(col => {%>
+        <div><%= col %></div>
+      <% }); %>
+    </div>
+  </div>
+</body>
+
+</html>

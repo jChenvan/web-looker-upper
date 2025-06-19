@@ -1,0 +1,22 @@
+[
+    {
+        "title":"url",
+        "type":"string",
+        "description":"the source of the information"
+    },
+    {
+        "title":"timestamp",
+        "type":"string",
+        "description":"when this program retrieved the information"
+    },
+    {
+        "title":"name",
+        "type":"string",
+        "description":"name of the video game"
+    },
+    {
+        "title":"reception",
+        "type":"string",
+        "description": "how the game was recieved, either good, bad or mixed."
+    }
+]
