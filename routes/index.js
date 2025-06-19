@@ -5,6 +5,7 @@ const { generateObject } = require('ai');
 var express = require('express');
 const fs = require("fs");
 const searchNewSources = require('../lib/searchNewSources');
+const { addRows } = require('../lib/DatabaseMethods');
 var router = express.Router();
 
 const google = createGoogleGenerativeAI({
@@ -26,6 +27,14 @@ router.post('/new-sources', async function(req,res,next) {
 
 router.post('/current-sources', function(req,res,next) {
 
+});
+
+router.post('/update-db', function(req,res) {
+  const {data} = req.body;
+
+  addRows(...data);
+
+  res.status(200).send(true);
 });
 
 module.exports = router;

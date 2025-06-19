@@ -52,9 +52,24 @@
     <button class="submit">submit</button>
   </div>
   <script>
+    const columns = [<%columns.forEach(str=>{ %> "<%= str%>",  <%})%>];
     const table = document.querySelector('.table');
     const [button1, button2] = document.querySelectorAll('.buttons > *');
     const submitButton = document.querySelector('.submit');
+
+    function makeElement(tag, text, id, ...classes) {
+      const element = document.createElement(tag);
+      if (text) element.textContent = text;
+      if (id) element.id = id;
+      if (classes && classes.length !== 0) classes.forEach(newClass => element.classList.add(newClass));
+
+      return element;
+    }
+
+    function deleteAllRows() {
+      const deleteIndex = columns.length + 2;
+      while (table.childElementCount > 6) table.removeChild(table.children.item(6));
+    }
 
     button1.addEventListener("click", async () => {
       const res = await fetch("/new-sources/", {
@@ -68,16 +83,14 @@
       const {data} = await res.json();
 
       data.forEach(entry=>{
-        const newRow =  [<%columns.forEach(str=>{ %> "<%= str%>",  <%})%>].map(col=>entry[col]);
+        const newRow =  columns.map(col=>entry[col]);
         const rowNumber = Number(Array.from(table.lastElementChild.classList).find(x=>x.startsWith("row-")).slice(4)) + 1;
 
-        const rowNumberDiv = document.createElement("div");
-        rowNumberDiv.textContent = rowNumber;
-        rowNumberDiv.classList.add(`row-${rowNumber}`);
 
-        const checkbox = document.createElement('input');
+        const rowNumberDiv = makeElement('div', rowNumber, null, `row-${rowNumber}`);
+
+        const checkbox = makeElement('input', null, `row-${rowNumber}`);
         checkbox.type = 'checkbox';
-        checkbox.id = `row-${rowNumber}`;
         checkbox.name = `row-${rowNumber}`;
         checkbox.value = 'yes';
         
@@ -85,17 +98,33 @@
         table.appendChild(checkbox);
 
         newRow.forEach((field,index) => {
-          const div = document.createElement("div");
-          div.classList.add(`row-${rowNumber}`);
-          div.classList.add([<% columns.forEach(col => { %> "<%= col %>", <%});%>][index]);
-          div.textContent = field;
-          table.appendChild(div);
+          table.appendChild(makeElement('div', field, null, `row-${rowNumber}`, columns[index]));
         });
       });
     });
 
     submitButton.addEventListener("click", async () => {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const rows = [];
 
+      checkboxes.forEach(box => {
+        if (!box.checked) return;
+        const row = {};
+        columns.forEach(col => {
+          const query = `.${box.id}.${col}`;
+          row[col] = document.querySelector(query)?.textContent || ""
+        });
+        rows.push(row);
+      });
+
+      await fetch("/update-db", {
+        method: "POST",
+        body: JSON.stringify({data: rows}),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      deleteAllRows();
     });
   </script>
 </body>

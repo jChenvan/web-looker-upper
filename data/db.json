@@ -1,0 +1,20 @@
+[
+  {
+    "url": "https://www.example.com/news/the-last-of-us-part-ii-review",
+    "timestamp": "2020-06-19T12:00:00Z",
+    "name": "The Last of Us Part II",
+    "reception": "mixed"
+  },
+  {
+    "url": "https://www.example.com/news/hades-review",
+    "timestamp": "2020-09-17T12:00:00Z",
+    "name": "Hades",
+    "reception": "good"
+  },
+  {
+    "url": "https://www.example.com/news/cyberpunk-2077-review",
+    "timestamp": "2020-12-10T12:00:00Z",
+    "name": "Cyberpunk 2077",
+    "reception": "mixed"
+  }
+]
