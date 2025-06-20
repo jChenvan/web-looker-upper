@@ -1,0 +1,112 @@
+<html>
+
+<head>
+  <title>Express</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background-color: gray;
+    }
+
+    nav > ul {
+      list-style: none;
+      display: flex;
+      gap: 10px;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex:1;
+    }
+
+    main > div {
+      padding: 5px;
+      border-radius: 5px;
+      background-color: gray;
+    }
+
+    .buttons {
+      display: flex;
+    }
+
+    .buttons > * {
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <div>
+      <ul class="keyword-list">
+        <% keywords.forEach(kw=>{ %>
+          <li> <button class="<%= encodeURIComponent(kw) %>">x</button> <%= kw %></li>
+        <% }); %>
+      </ul>
+      <input type="text" name="" id="new-keyword" placeholder="new keyword">
+      <button class="submit">submit</button>
+    </div>
+  </main>
+  <script>
+    const keywords = [<%keywords.forEach(str=>{ %> "<%= str%>",  <%})%>];
+    const kwList = document.querySelector('.keyword-list');
+    const input = document.querySelector('input');
+    const submitButton = document.querySelector('.submit');
+
+    function makeElement(tag, text, id, ...classes) {
+      const element = document.createElement(tag);
+      if (text) element.textContent = text;
+      if (id) element.id = id;
+      if (classes && classes.length !== 0) classes.forEach(newClass => element.classList.add(newClass));
+
+      return element;
+    }
+
+    submitButton.addEventListener("click", async () => {
+      const newKeyword = input.value;
+
+      const res = await fetch('/api/add-keyword/', {
+        method: "POST",
+        body: JSON.stringify({keyword: newKeyword}),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      const {update} = await res.json();
+
+      if (!update) return;
+
+      const newLi = makeElement("li", newKeyword);
+      const deleteButton = makeElement("button","x",null,encodeURIComponent(newKeyword));
+      newLi.insertBefore(deleteButton, newLi.firstChild);
+
+      kwList.appendChild(newLi);
+    });
+  
+    kwList.addEventListener("click", e=>{
+      if (e.target.tagName !== "BUTTON") return;
+      const keyword = decodeURIComponent(e.target.className);
+      e.target.parentElement.remove();
+
+      fetch('/api/remove-keyword/', {
+        method: "POST",
+        body: JSON.stringify({keyword}),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
