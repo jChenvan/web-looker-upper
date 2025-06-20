@@ -27,16 +27,15 @@ npm install
 ### Run the App
 
 ```bash
-DEBUG=web-looker-upper:* npm start
+npm run start
 ```
-
-Then navigate to http://localhost:3000/
 
 ### Roadmap / TODO
 
-- 🔄 Replace dummy data with live AI-generated insights
-- 🗃️ Migrate from JSON file storage to a full database (e.g., SQLite, PostgreSQL)
-- 🕒 Track the last search timestamp for each query or source
-- 🎨 Improve the user interface and user experience
-- 🧠 Expand system intelligence and relevance scoring
-- 🧩 Additional enhancements and edge case handling
+- Replace dummy data with live AI-generated insights
+- Migrate from JSON file storage to a full database (e.g., SQLite, PostgreSQL)
+- Track the last search timestamp for each query or source
+- Improve the user interface and user experience
+- Expand system intelligence and relevance scoring
+- Way to update keywords
+- Additional enhancements and edge case handling
