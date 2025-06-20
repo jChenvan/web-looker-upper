@@ -74,7 +74,7 @@
 
     function makeOnClick(willSearchNew) {
       return async () => {
-        const res = await fetch(willSearchNew ? "/new-sources/" : "/current-sources/", {
+        const res = await fetch(willSearchNew ? "/api/new-sources/" : "/api/current-sources/", {
           method: "POST",
           body: JSON.stringify({lastSearchDate: "2020"}), //TODO: storing/retriving last search date
           headers: {
@@ -125,7 +125,7 @@
         rows.push(row);
       });
 
-      await fetch("/update-db", {
+      await fetch("/api/update-db", {
         method: "POST",
         body: JSON.stringify({data: rows}),
         headers: {
@@ -146,7 +146,7 @@
         newUrls.push(shortUrl);
       });
 
-      await fetch("/update-urls", {
+      await fetch("/api/update-urls", {
         method: "POST",
         body: JSON.stringify({newUrls}),
         headers: {
